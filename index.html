@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Space Travel V0.5</title>
+    <title>Space Travel V 1.0</title>
     <style>
       body {
         margin: 0;
@@ -13,7 +13,7 @@
   <body>
     <script type="module">
 
-      console.info('Space Travel V0.5')
+      console.info('Space Travel V 1.0')
 
       import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/0.158.0/three.module.js'
 
@@ -21,7 +21,7 @@
 
       let myScene = new THREE.Scene()
       let myCam = new THREE.PerspectiveCamera(90, window.innerWidth / window.innerHeight, 0.1, 1000)
-      myCam.position.set(0, 1, 5)
+      myCam.position.set(0, 1, 10)
       let myRender = new THREE.WebGLRenderer()
       myRender.setSize(window.innerWidth, window.innerHeight)
       document.body.appendChild(myRender.domElement)
@@ -121,11 +121,34 @@
           }
         }
       }
+
+      // Asteroid
+
+      const setAsteroidRandom = (asteroid, shipYCoord) => {
+        asteroid.position.set(getRandomNumber() - 5, shipYCoord, -40)
+      }
+
+      let rockGeometry = new THREE.DodecahedronGeometry(1)
+      const rockMaterial = new THREE.MeshStandardMaterial({color: 0xb15b29, roughness: 0.9})
+
+      let asteroid = new THREE.Mesh(rockGeometry, rockMaterial)
+      myScene.add(asteroid)
+
+      const asteroidMove = (asteroid, limit, shipYCoord) => {
+        asteroid.position.z += 0.15
+        asteroid.rotateZ(0.01)
+        if (asteroid.position.z > limit) {
+          setAsteroidRandom(asteroid, shipYCoord)
+        }
+      }
+
+
       // Animation
 
       const animate = () => {
         moveShip(ufoInput, ship)
         moveStars(stars, myCam.position.z)
+        asteroidMove(asteroid, myCam.position.z, ship.position.y)
 
         myRender.render(myScene, myCam)
 

@@ -1,3 +1,3 @@
 # Space Travel
 
-V 0.5
+V 1.0
